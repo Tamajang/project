@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>รายงานผลการเรียน</title>
+
+<style>
+:root {
+  --primary: #0f43ec;
+  --dark: #0f172a;
+  --bg: #f1f5f9;
+  --card: #ffffff;
+  --text: #1e293b;
+  --radius: 16px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  overflow-x: hidden;
+}
+
+
+.bg-effects {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.bg-effects::before,
+.bg-effects::after {
+  content: "";
+  position: absolute;
+  inset: -50%;
+  background:
+    radial-gradient(circle at 20% 30%, rgba(255,255,255,.18), transparent 40%),
+    radial-gradient(circle at 80% 20%, rgba(255,255,255,.12), transparent 45%),
+    radial-gradient(circle at 60% 80%, rgba(255,255,255,.15), transparent 40%),
+    radial-gradient(circle at 30% 70%, rgba(255,255,255,.1), transparent 45%);
+  animation: sparkleMove 18s linear infinite;
+}
+
+.bg-effects::after {
+  animation-duration: 28s;
+  opacity: .6;
+}
+
+@keyframes sparkleMove {
+  from { transform: translateY(0) rotate(0deg); }
+  to { transform: translateY(-120px) rotate(360deg); }
+}
+
+
+body > * {
+  position: relative;
+  z-index: 1;
+}
+
+
+#loader {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(135deg, #1e3a8a, var(--dark));
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+#loader span {
+  width: 60px;
+  height: 60px;
+  border: 6px solid rgba(255,255,255,.2);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+#loader p {
+  color: #fff;
+  margin-top: 1rem;
+  letter-spacing: 3px;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes pulse { 0%,100%{opacity:.4} 50%{opacity:1} }
+
+
+header {
+  background: linear-gradient(135deg, #1e3a8a, var(--primary));
+  color: #fff;
+  padding: 4rem 1.5rem 6rem;
+  text-align: center;
+  position: relative;
+}
+
+header h1 {
+  font-size: 2.3rem;
+}
+
+header p { opacity: .9; margin-top: .5rem; }
+
+
+.profile-wrapper {
+  position: absolute;
+  left: 50%;
+  bottom: -70px;
+  transform: translateX(-50%);
+}
+
+.profile {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  border: 6px solid #fff;
+  overflow: hidden;
+  box-shadow: 0 20px 40px rgba(0,0,0,.25);
+  animation: float 3s ease-in-out infinite;
+}
+
+.profile img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+@keyframes float {
+  0%,100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+
+main {
+  max-width: 960px;
+  margin: 6rem auto 3rem;
+  padding: 0 1.5rem;
+}
+
+.section {
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: 0 12px 35px rgba(0,0,0,.08);
+  padding: 2rem;
+  margin-bottom: 2.5rem;
+  opacity: 0;
+  transform: translateY(40px) scale(.97);
+  transition: .7s cubic-bezier(.22,.61,.36,1);
+}
+
+.section.show {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.section h2 {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--primary);
+  margin-bottom: 1rem;
+}
+
+
+button {
+  background: linear-gradient(135deg, var(--primary), #115fd4);
+  color: #ffffff;
+  border: none;
+  padding: .6rem 1.3rem;
+  border-radius: 999px;
+  cursor: pointer;
+  font-size: .85rem;
+  transition: .2s;
+}
+
+button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px rgba(37,99,235,.4);
+}
+button:active { transform: scale(.95); }
+
+
+.content {
+  display: none;
+  margin-top: 1rem;
+  animation: expand .4s ease;
+}
+
+@keyframes expand {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.content p, .content li { margin-bottom: .5rem; }
+ul { padding-left: 1.2rem; }
+
+footer {
+  background: var(--dark);
+  color: #cf5454;
+  text-align: center;
+  padding: 1.5rem;
+  margin-top: 4rem;
+  font-size: .9rem;
+}
+</style>
+</head>
+
+<body>
+
+
+<div class="bg-effects"></div>
+
+
+<div id="loader">
+  <span></span>
+  <p>LOADING</p>
+</div>
+
+<header>
+  <h1>📊รายงานผลเกรด</h1>
+
+
+  <div class="profile-wrapper">
+    <div class="profile">
+      <img src="D:\002\images\student.jpg" alt="profile">
+    </div>
+  </div>
+</header>
+
+<main>
+
+<section class="section">
+  <h2>ข้อมูลนักศึกษา <button onclick="toggle('student', this)">แสดงข้อมูล</button></h2>
+  <div id="student" class="content">
+    <p><strong>🧑‍💼ชื่อ – นามสกุล:</strong> ชญานนท์ อารีย์</p>
+    <p><strong>📚รหัสนักศึกษา:</strong> 674259002</p>
+    <p><strong>📓หมู่เรียน:</strong> 67/50</p>
+    <p><strong>🎉อาจารย์ที่ปรึกษา:</strong> ผู้ช่วยศาสตราจารย์ ดร. อุษณีย์ ภักดีตระกูลวงศ์ </p>
+    <p><strong>GitHub:</strong>https://github.com/Tamajang</p>
+  </div>
+</section>
+
+<section class="section">
+  <h2>ผลการเรียน <button onclick="toggle('grade', this)">แสดงข้อมูล</button></h2>
+  <div id="grade" class="content">
+    <ul>
+      <li>📕ปี 1 เทอม 1 : 2.00</li>
+      <li>📖ปี 1 เทอม 2 : 2.43</li>
+      <li>📓ปี 2 เทอม 1 : 2.34</li>
+    </ul>
+    <p><strong>🎉เกรดเฉลี่ยสะสม: 2.26</strong> </p>
+  </div>
+</section>
+
+<section class="section">
+  <h2>ข้อมูลติดต่อ <button onclick="toggle('contact', this)">แสดงข้อมูล</button></h2>
+  <div id="contact" class="content">
+    <p>🎃Email: 674259002@webmail.npru.ac.th</p>
+    <p>😊โทรศัพท์: 0624425850</p>
+  </div>
+</section>
+
+</main>
+
+<footer>© 2024 Webmaster by Suksawat Saelim.ID 674259002
+        🎁Nakhon Pathom Rajabhat University
+</footer>
+
+<script>
+window.addEventListener('load', () => {
+  const loader = document.getElementById('loader');
+  loader.style.opacity = '0';
+  loader.style.transition = 'opacity .6s ease';
+  setTimeout(() => loader.remove(), 700);
+});
+
+function toggle(id, btn) {
+  const el = document.getElementById(id);
+  const isOpen = el.classList.contains('open');
+
+  if (isOpen) {
+    el.style.maxHeight = el.scrollHeight + 'px';
+    requestAnimationFrame(() => {
+      el.style.maxHeight = '0px';
+      el.style.opacity = '0';
+    });
+    el.classList.remove('open');
+    btn.innerText = 'แสดงข้อมูล';
+  } else {
+    el.style.display = 'block';
+    el.style.maxHeight = '0px';
+    el.style.opacity = '0';
+    requestAnimationFrame(() => {
+      el.classList.add('open');
+      el.style.maxHeight = el.scrollHeight + 'px';
+      el.style.opacity = '1';
+    });
+    btn.innerText = 'ซ่อนข้อมูล';
+  }
+}
+
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('show'); });
+}, { threshold: 0.25 });
+
+document.querySelectorAll('.section').forEach(sec => observer.observe(sec));
+</script>
+
+</body>
+</html>
