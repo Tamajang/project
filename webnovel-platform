@@ -1,1 +1,171 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mini WebNovel Platform</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+--bg:#0f172a;
+--card:#1e293b;
+--text:#f1f5f9;
+--accent:#00dc64;
+}
+body.light{
+--bg:#f8fafc;
+--card:#ffffff;
+--text:#0f172a;
+}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Noto Sans Thai',sans-serif}
+body{background:var(--bg);color:var(--text);padding:20px;transition:.3s}
+header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
+button{padding:6px 12px;border:none;border-radius:8px;background:var(--accent);color:white;cursor:pointer;margin:4px 0}
+input,textarea{width:100%;padding:8px;margin:6px 0;border-radius:8px;border:none}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:15px}
+.card{background:var(--card);padding:15px;border-radius:12px;cursor:pointer;transition:.2s}
+.card:hover{transform:translateY(-5px)}
+.reader{max-width:700px;margin:auto}
+.chapter{margin:30px 0}
+.comment{background:rgba(255,255,255,0.05);padding:5px;border-radius:6px;margin-top:5px}
+.rank-item{display:flex;justify-content:space-between;padding:4px 0}
+.admin-panel{background:var(--card);padding:15px;border-radius:12px;margin-bottom:20px}
+.hidden{display:none}
+</style>
+</head>
+<body>
 
+<header>
+<h2>📚 Mini WebNovel</h2>
+<div>
+<button onclick="toggleMode()">🌙</button>
+<button onclick="showAdmin()">⚙️ Admin</button>
+</div>
+</header>
+
+<div id="rankingBox"></div>
+<div id="adminBox" class="hidden"></div>
+<div id="home"></div>
+<div id="reader"></div>
+
+<script>
+function getData(){
+return JSON.parse(localStorage.getItem("webnovel_data"))||{novels:[],stats:{}};
+}
+function saveData(data){
+localStorage.setItem("webnovel_data",JSON.stringify(data));
+}
+
+function initDemo(){
+let data=getData();
+if(data.novels.length===0){
+data.novels=[
+{id:1,title:"นักล่าระบบเทพ",desc:"เรื่องราวของชายผู้ได้รับระบบโกง",chapters:[
+{title:"ตอนที่ 1","content":"เขาตื่นขึ้นพร้อมเสียงระบบ..."}
+]}
+];
+saveData(data);
+}
+}
+initDemo();
+
+function renderHome(){
+let data=getData();
+let html='<div class="grid">';
+data.novels.forEach(n=>{
+let views=data.stats[n.id]?.total||0;
+html+=`
+<div class="card" onclick="openNovel(${n.id})">
+<h3>${n.title}</h3>
+<p>${n.desc}</p>
+<p>👁 ${views}</p>
+</div>`;
+});
+html+="</div>";
+document.getElementById("home").innerHTML=html;
+document.getElementById("reader").innerHTML="";
+renderRanking();
+}
+
+function openNovel(id){
+addView(id);
+let data=getData();
+let novel=data.novels.find(n=>n.id===id);
+let html='<div class="reader">';
+html+=`<button onclick="renderHome()">← กลับ</button>`;
+html+=`<h2>${novel.title}</h2>`;
+novel.chapters.forEach((c,i)=>{
+let key=`comment_${id}_${i}`;
+let comments=JSON.parse(localStorage.getItem(key))||[];
+html+=`
+<div class="chapter">
+<h3>${c.title}</h3>
+<p>${c.content}</p>
+<textarea id="c_${id}_${i}" placeholder="คอมเมนต์..."></textarea>
+<button onclick="addComment(${id},${i})">ส่ง</button>
+`;
+comments.forEach(cm=>{
+html+=`<div class="comment">💬 ${cm}</div>`;
+});
+html+="</div>";
+});
+html+="</div>";
+document.getElementById("home").innerHTML="";
+document.getElementById("reader").innerHTML=html;
+}
+
+function addComment(id,i){
+let text=document.getElementById(`c_${id}_${i}`).value;
+if(!text)return;
+let key=`comment_${id}_${i}`;
+let comments=JSON.parse(localStorage.getItem(key))||[];
+comments.push(text);
+localStorage.setItem(key,JSON.stringify(comments));
+openNovel(id);
+}
+
+function addView(id){
+let data=getData();
+if(!data.stats[id])data.stats[id]={total:0,daily:{},weekly:{}};
+let today=new Date().toISOString().split("T")[0];
+let week=getWeek();
+data.stats[id].total++;
+data.stats[id].daily[today]=(data.stats[id].daily[today]||0)+1;
+data.stats[id].weekly[week]=(data.stats[id].weekly[week]||0)+1;
+saveData(data);
+}
+
+function getWeek(){
+let d=new Date();
+let onejan=new Date(d.getFullYear(),0,1);
+return Math.ceil((((d-onejan)/86400000)+onejan.getDay()+1)/7);
+}
+
+function renderRanking(){
+let data=getData();
+let today=new Date().toISOString().split("T")[0];
+let week=getWeek();
+let ranking=data.novels.map(n=>{
+return{
+title:n.title,
+total:data.stats[n.id]?.total||0,
+daily:data.stats[n.id]?.daily?.[today]||0,
+weekly:data.stats[n.id]?.weekly?.[week]||0
+}
+}).sort((a,b)=>b.total-a.total);
+
+let html='<div class="admin-panel"><h3>🏆 Ranking</h3>';
+ranking.forEach((r,i)=>{
+html+=`<div class="rank-item">#${i+1} ${r.title} (${r.total})</div>`;
+});
+html+="</div>";
+document.getElementById("rankingBox").innerHTML=html;
+}
+
+function showAdmin(){
+let html=`
+<div class="admin-panel">
+<h3>เพิ่มนิยาย</h3>
+<input id="newTitle" placeholder="ชื่อนิยาย">
+<input id="newDesc" placeholder="คำอธิบาย">
+<button onclick="addNovel...
