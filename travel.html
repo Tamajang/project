@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>เที่ยวไทย</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Sarabun&display=swap" rel="stylesheet">
+
+<style>
+body {
+    font-family: 'Sarabun', sans-serif;
+    background: #f4f6f9;
+    transition: 0.3s;
+}
+.dark { background: #121212; color: white; }
+
+.navbar { background: rgba(0,0,0,0.85); }
+
+.hero-img {
+    height: 90vh;
+    object-fit: cover;
+    filter: brightness(70%);
+}
+.carousel-caption { bottom: 40%; }
+
+.card img {
+    height: 220px;
+    object-fit: cover;
+}
+
+.card {
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+    transition: 0.3s;
+}
+.card:hover { transform: translateY(-10px); }
+
+.star {
+    color: gold;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.page { display: none; }
+.active { display: block; }
+
+.footer {
+    background: #111;
+    color: white;
+    padding: 30px;
+    text-align: center;
+    margin-top: 40px;
+}
+</style>
+</head>
+
+<body>
+
+<!-- เมนู -->
+<nav class="navbar navbar-dark">
+<div class="container">
+    <a class="navbar-brand" href="#" onclick="showPage('home')">เที่ยวไทย</a>
+    <div>
+        <button class="btn btn-warning btn-sm" onclick="toggleDark()">🌙</button>
+        <a class="nav-link d-inline text-white" href="#" onclick="showPage('home')">หน้าแรก</a>
+        <a class="nav-link d-inline text-white" href="#" onclick="showPage('places')">สถานที่</a>
+    </div>
+</div>
+</nav>
+
+<!-- หน้าแรก -->
+<div id="home" class="page active">
+
+<!-- Hero Slide -->
+<div id="heroSlide" class="carousel slide" data-bs-ride="carousel">
+
+    <!-- รูป -->
+    <div class="carousel-inner">
+        <div class="carousel-item active" data-bs-interval="3000">
+            <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e" class="d-block w-100 hero-img">
+            
+        </div>
+
+        <div class="carousel-item" data-bs-interval="3000">
+            <img src="https://images.unsplash.com/photo-1552465011-b4e21bf6e79a" class="d-block w-100 hero-img">
+            
+        </div>
+
+        <div class="carousel-item" data-bs-interval="3000">
+            <img src="https://images.unsplash.com/photo-1563492065599-3520f775eeed" class="d-block w-100 hero-img">
+        
+        </div>
+    </div>
+
+    <!-- ปุ่มซ้าย -->
+    <button class="carousel-control-prev" type="button" data-bs-target="#heroSlide" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon"></span>
+    </button>
+
+    <!-- ปุ่มขวา -->
+    <button class="carousel-control-next" type="button" data-bs-target="#heroSlide" data-bs-slide="next">
+        <span class="carousel-control-next-icon"></span>
+    </button>
+
+</div>
+</div>
+
+<!-- หน้าสถานที่ -->
+<div id="places" class="page">
+<div class="container mt-5">
+<h2>สถานที่ท่องเที่ยว</h2>
+<input type="text" id="search" class="form-control mb-4" placeholder="ค้นหา..." onkeyup="searchPlace()">
+<div class="row" id="placeList"></div>
+</div>
+</div>
+
+<!-- หน้ารายละเอียด -->
+<div id="detail" class="page">
+<div class="container mt-5" id="detailData"></div>
+</div>
+
+<div class="footer">เว็บไซต์แนะนำสถานที่ท่องเที่ยว</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+function showPage(page) {
+    document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+    document.getElementById(page).classList.add("active");
+}
+
+function toggleDark() {
+    document.body.classList.toggle("dark");
+}
+
+let places = [
+{name:"เกาะพีพี", detail:"ทะเลสวย น้ำใส เหมาะแก่การพักผ่อน", img:"https://loveandlunchmeat.com/wp-content/uploads/2022/11/791740c5-fd79-395a-8293-5926eda63f05.jpg", rating:0, reviews:[]},
+{name:"ตลาดน้ำอัมพวา", detail:"ของกินเยอะ ล่องเรือ ชมวิถีชีวิต", img:"https://cms.dmpcdn.com/travel/2022/02/28/06c10d40-9855-11ec-9037-bf7933f54c79_webp_original.jpg", rating:0, reviews:[]},
+{name:"วัดจุฬามณี", detail:"ไหว้ท้าวเวสสุวรรณ ขอพร", img:"https://s359.kapook.com/r/1200/630/pagebuilder/0832ab4b-3640-45a2-b850-adbeb8ecb09e.jpg", rating:0, reviews:[]},
+{name:"ดอยอินทนนท์", detail:"ภูเขาสูง อากาศดี น้ำตกสวย", img:"https://www.one2go.co/wp-content/uploads/2019/09/1-1568x882.png", rating:0, reviews:[]},
+{name:"ภูทับเบิก", detail:"ทะเลหมอกสวย อากาศเย็น", img:"https://s359.thaibuffer.com/pagebuilder/585feaae-1763-4a88-b183-119494e3354d.jpg", rating:0, reviews:[]},
+{name:"เกาะเสม็ด", detail:"ทะเลใกล้กรุงเทพ เดินทางง่าย", img:"https://roijang.com/wp-content/uploads/2022/10/shutterstock_1014196357.jpg", rating:0, reviews:[]}
+];
+
+function showPlaces(list = places) {
+    let html = "";
+    list.forEach((p, index) => {
+        html += `
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <img src="${p.img}">
+                <div class="card-body">
+                    <h5>${p.name}</h5>
+                    <p>${p.detail}</p>
+                    <button class="btn btn-primary" onclick="showDetail(${index})">รายละเอียด</button>
+                </div>
+            </div>
+        </div>
+        `;
+    });
+    document.getElementById("placeList").innerHTML = html;
+}
+
+function showDetail(index) {
+    let p = places[index];
+    let stars = "";
+    for(let i=1;i<=5;i++){
+        stars += `<span class="star" onclick="rate(${index},${i})">★</span>`;
+    }
+
+    let reviewHtml = "";
+    p.reviews.forEach(r => reviewHtml += `<li>${r}</li>`);
+
+    document.getElementById("detailData").innerHTML = `
+        <h2>${p.name}</h2>
+        <img src="${p.img}" class="img-fluid mb-3">
+        <p>${p.detail}</p>
+        <h4>ให้คะแนน</h4>
+        ${stars}
+        <br><br>
+        <button class="btn btn-success" onclick="addReview(${index})">เขียนรีวิว</button>
+        <ul>${reviewHtml}</ul>
+        <button class="btn btn-secondary mt-3" onclick="showPage('places')">← กลับ</button>
+    `;
+    showPage('detail');
+}
+
+function rate(index, star) {
+    places[index].rating = star;
+    alert("ให้คะแนน " + star + " ดาว");
+}
+
+function addReview(index) {
+    let text = prompt("เขียนรีวิว:");
+    if(text){
+        places[index].reviews.push(text);
+        showDetail(index);
+    }
+}
+
+function searchPlace() {
+    let keyword = document.getElementById("search").value.toLowerCase();
+    let filtered = places.filter(p => p.name.toLowerCase().includes(keyword));
+    showPlaces(filtered);
+}
+
+showPlaces();
+</script>
+
+</body>
+</html>
