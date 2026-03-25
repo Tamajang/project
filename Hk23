@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ท่องเที่ยวสมุทรสงคราม</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f4f4f4;
+}
+
+/* ===== เมนู ===== */
+nav {
+    background: #2c3e50;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 40px;
+}
+
+nav h1 {
+    font-size: 24px;
+}
+
+nav ul {
+    display: flex;
+    list-style: none;
+}
+
+nav ul li {
+    margin-left: 20px;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+}
+
+/* ===== Slider ===== */
+.slider {
+    width: 100%;
+    height: 450px;
+    overflow: hidden;
+}
+
+.slides {
+    display: flex;
+    width: 400%;
+    height: 100%;
+    animation: slide 16s infinite;
+}
+
+.slides img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Animation */
+@keyframes slide {
+    0% {margin-left: 0;}
+    20% {margin-left: 0;}
+    25% {margin-left: -100%;}
+    45% {margin-left: -100%;}
+    50% {margin-left: -200%;}
+    70% {margin-left: -200%;}
+    75% {margin-left: -300%;}
+    95% {margin-left: -300%;}
+    100% {margin-left: 0;}
+}
+
+/* ===== Content ===== */
+.container {
+    padding: 40px;
+}
+
+.container h2 {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 25px;
+}
+
+.card {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    overflow: hidden;
+    transition: 0.3s;
+}
+
+.card:hover {
+    transform: scale(1.03);
+}
+
+.card img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+}
+
+.card h3 {
+    margin: 10px;
+}
+
+.card p {
+    margin: 10px;
+    color: #555;
+}
+
+/* ===== Footer ===== */
+footer {
+    background: #2c3e50;
+    color: white;
+    text-align: center;
+    padding: 20px;
+    margin-top: 30px;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 1024px) {
+    nav {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    nav ul {
+        margin-top: 10px;
+    }
+
+    .slider {
+        height: 350px;
+    }
+}
+
+@media (max-width: 768px) {
+    .grid {
+        grid-template-columns: 1fr;
+    }
+
+    .slider {
+        height: 300px;
+    }
+
+    nav h1 {
+        font-size: 20px;
+    }
+
+    nav ul li a {
+        font-size: 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .slider {
+        height: 220px;
+    }
+
+    .container {
+        padding: 20px;
+    }
+
+    .card img {
+        height: 180px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- เมนู -->
+<nav>
+    <h1>สมุทรสงคราม</h1>
+    <ul>
+        <li><a href="#">หน้าแรก</a></li>
+        <li><a href="#">สถานที่ท่องเที่ยว</a></li>
+        <li><a href="#">ติดต่อ</a></li>
+    </ul>
+</nav>
+
+<!-- Slider -->
+<div class="slider">
+    <div class="slides">
+        <img src="https://images.unsplash.com/photo-1552465011-b4e21bf6e79a">
+        <img src="https://images.unsplash.com/photo-1563492065599-3520f775eeed">
+        <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e">
+        <img src="https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1">
+    </div>
+</div>
+
+<!-- เนื้อหา -->
+<div class="container">
+    <h2>สถานที่ท่องเที่ยวแนะนำ</h2>
+    <div class="grid">
+        <div class="card">
+            <img src="https://images.unsplash.com/photo-1552465011-b4e21bf6e79a">
+            <h3>ตลาดน้ำอัมพวา</h3>
+            <p>ตลาดน้ำชื่อดัง มีของกินมากมาย และล่องเรือชมหิ่งห้อย</p>
+        </div>
+
+        <div class="card">
+            <img src="https://images.unsplash.com/photo-1563492065599-3520f775eeed">
+            <h3>วัดจุฬามณี</h3>
+            <p>วัดดังสำหรับไหว้ท้าวเวสสุวรรณ ขอพร โชคลาภ</p>
+        </div>
+
+        <div class="card">
+            <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e">
+            <h3>ดอนหอยหลอด</h3>
+            <p>แหล่งท่องเที่ยวธรรมชาติ มีหอยหลอดจำนวนมาก</p>
+        </div>
+
+        <div class="card">
+            <img src="https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1">
+            <h3>โฮมสเตย์ริมคลอง</h3>
+            <p>พักผ่อนแบบธรรมชาติ สัมผัสวิถีชีวิตชาวบ้าน</p>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer>
+    <p>© เว็บไซต์ท่องเที่ยวจังหวัดสมุทรสงคราม</p>
+</footer>
+
+</body>
+</html>
